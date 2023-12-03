@@ -58,21 +58,20 @@ function filterCuss(message,callback){
 
 
 app.post("/newRoom", (req,res)=>{
-    rooms[makeid] = {
+    let jasd = makeid(5)
+    rooms[jasd] = {
         "Users":{
-            "Leviathan":{
-                isBanned: false,
-             
-            }
+            
 
         },
         "Messages":[
-            "Hello, Mate:Leviathan"
+     
         ],
         "Uploads": {
             
         }
     }
+    res.send(jasd);
 })
 
 app.post('/sendMessage',(req,res)=>{
@@ -84,7 +83,7 @@ app.post('/sendMessage',(req,res)=>{
             res.send(({"error": "Message Not Approved", "action": "removeDiv", "rmdiv": req.query["div"]})).status(401);
         }else{
             res.send({"status": "sent", "message": message, "query":req.query});
-            messages[roomID]["Messages"].append(`${message}:${username}`)
+            messages[roomID]["Messages"].push(`${message}:${username}`)
         }
         
     })
