@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Direct Message</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #2c3e50; 
+            color: #ecf0f1; 
+            overflow: hidden;
+        }
+
+        #chat-container {
+            height: 100vh;
+            overflow-y: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        #messages {
+            flex: 1;
+            padding: 15px;
+            overflow-y: auto;
+            scrollbar-width: thin;
+            scrollbar-color: #34495e #2c3e50;
+        }
+
+        #messages::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        #messages::-webkit-scrollbar-thumb {
+            background-color: #34495e;
+        }
+
+        #messages::-webkit-scrollbar-track {
+            background-color: #2c3e50;
+        }
+
+        #input-box {
+            width: 70%;
+            margin: 20px auto 10px; 
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            border-top: 1px solid #34495e;
+            background-color: #2c3e50;
+            border-radius: 15px;
+        }
+
+        #message-input {
+            flex: 1;
+            padding: 8px;
+            border: none;
+            border-radius: 15px;
+            outline: none;
+            background-color: #34495e; 
+            color: #ecf0f1; 
+        }
+
+        #action-icons {
+            display: flex;
+            margin-left: 10px;
+        }
+
+        #action-icons img {
+            width: 20px; 
+            height: 20px; 
+            margin-right: 10px;
+            cursor: pointer;
+        }
+
+        #send-button {
+            background-color: #3498db; 
+            color: #ecf0f1;
+            padding: 8px 15px;
+            border: none;
+            border-radius: 15px;
+            cursor: pointer;
+            margin-left: 10px;
+        }
+
+        #send-button:hover {
+            background-color: #2980b9; 
+        }
+    </style>
+</head>
+
+<body>
+    <div id="chat-container">
+        <div id="messages"></div>
+        <div id="input-box">
+            <input type="text" id="message-input" placeholder="Type your message here">
+            <div id="action-icons">
+                <img src="upload-icon-path.png" alt="Upload" title="Upload">
+                <img src="file-icon-path.png" alt="File" title="File">
+                <img src="emoji-icon-path.png" alt="Emoji" title="Emoji">
+            </div>
+            <button id="send-button">Send</button>
+        </div>
+    </div>
+</body>
+
+</html>
+ 
