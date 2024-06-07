@@ -5,13 +5,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Direct Message</title>
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"></script>
+    <script src="room.js"></script>
     <style>
         body {
             font-family: 'Arial', sans-serif;
             margin: 0;
             padding: 0;
-            background-color: #2c3e50; 
-            color: #ecf0f1; 
+            background-color: #36393f; /* Discord background color */
+            color: #dcddde; /* Discord text color */
             overflow: hidden;
         }
 
@@ -27,7 +29,7 @@
             padding: 15px;
             overflow-y: auto;
             scrollbar-width: thin;
-            scrollbar-color: #34495e #2c3e50;
+            scrollbar-color: #4f545c #36393f; /* Discord scrollbar color */
         }
 
         #messages::-webkit-scrollbar {
@@ -35,21 +37,55 @@
         }
 
         #messages::-webkit-scrollbar-thumb {
-            background-color: #34495e;
+            background-color: #4f545c;
         }
 
         #messages::-webkit-scrollbar-track {
-            background-color: #2c3e50;
+            background-color: #36393f;
+        }
+
+        .message {
+            margin-bottom: 10px;
+            max-width: 70%;
+        }
+
+        .message p {
+            padding: 10px;
+            border-radius: 8px;
+            background-color: #40444b; /* Discord message background color */
+        }
+        .messagerr p {
+            padding: 10px;
+            border-radius: 8px;
+            background-color: #40444b; /* Discord message background color */
+            color: rgba(255, 0, 0, 0.933);
+        }
+        .user-name {
+            font-weight: bold;
+            color: #7289da; /* Discord username color */
+        }
+
+        .sent {
+            align-self: flex-end;
+            margin-left: auto; /* Push sent messages to the right */
+        }
+        .senterr {
+            align-self: flex-end;
+            margin-left: auto; /* Push sent messages to the right */
+            color: rgba(255, 0, 0, 0.933);
+        }
+        .sent .user-name {
+            color: #3498db; /* Your username color */
         }
 
         #input-box {
             width: 70%;
-            margin: 20px auto 10px; 
+            margin: 20px auto 10px;
             display: flex;
             align-items: center;
             padding: 10px;
-            border-top: 1px solid #34495e;
-            background-color: #2c3e50;
+            border-top: 1px solid #4f545c;
+            background-color: #36393f;
             border-radius: 15px;
         }
 
@@ -59,8 +95,8 @@
             border: none;
             border-radius: 15px;
             outline: none;
-            background-color: #34495e; 
-            color: #ecf0f1; 
+            background-color: #40444b; /* Discord input background color */
+            color: #dcddde; /* Discord input text color */
         }
 
         #action-icons {
@@ -69,15 +105,15 @@
         }
 
         #action-icons img {
-            width: 20px; 
-            height: 20px; 
+            width: 20px;
+            height: 20px;
             margin-right: 10px;
             cursor: pointer;
         }
 
         #send-button {
-            background-color: #3498db; 
-            color: #ecf0f1;
+            background-color: #7289da; /* Discord send button background color */
+            color: #dcddde;
             padding: 8px 15px;
             border: none;
             border-radius: 15px;
@@ -86,25 +122,99 @@
         }
 
         #send-button:hover {
-            background-color: #2980b9; 
+            background-color: #677bc4; /* Discord send button hover color */
+        }
+        #modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .upload-box {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            border: 2px dashed #ccc;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        .upload-box:hover {
+            border-color: #aaa;
+        }
+
+        #file-input {
+            display: none;
+        }
+
+        label {
+            font-size: 16px;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .file-name {
+            font-size: 14px;
+            color: #555;
+        }
+        .close-button {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            cursor: pointer;
+            font-size: 20px;
+            color: #777;
         }
     </style>
 </head>
 
 <body>
+    <div id="modal-overlay">
+        <div class="modal">
+            <span class="close-button" onclick="toggleModal()">&#10006;</span>
+            <div class="upload-box" onclick="document.getElementById('file-input').click()">
+               
+                <label for="file-input">Click or drag to upload</label>
+                <span class="file-name" id="file-name">No file selected</span>
+                
+            </div>
+    
+            <input type="file" id="file-input" onchange="readFileContent()">
+            
+        </div>
+    </div>
+
     <div id="chat-container">
-        <div id="messages"></div>
+        <div id="messages">
+            
+        </div>
         <div id="input-box">
             <input type="text" id="message-input" placeholder="Type your message here">
             <div id="action-icons">
-                <img src="upload-icon-path.png" alt="Upload" title="Upload">
-                <img src="file-icon-path.png" alt="File" title="File">
-                <img src="emoji-icon-path.png" alt="Emoji" title="Emoji">
+                <div onclick="toggleModal()"><img src="upload-icon-path.png" alt="Upload" title="Upload" class=""></div>
+               
             </div>
             <button id="send-button">Send</button>
         </div>
+       
+    
+        
     </div>
 </body>
 
 </html>
- 
